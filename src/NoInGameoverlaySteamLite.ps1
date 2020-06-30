@@ -1,11 +1,11 @@
 Write-Output "[Full path to locations]"
-$bsl = Read-Host "Installed location of steam. Leave empty for default install" `
-	"location('C:\Program Files (x86)\Steam')"
+$bsl = Read-Host "Installed location of steam. Leave empty for default" `
+	"install location('C:\Program Files (x86)\Steam')"
 if ([string]::IsNullOrEmpty($bsl)) {
 	$bsl = "C:\Program Files (x86)\Steam"
 }
-$sll = Read-Host "Location of SteamLite. Leave emptry to create a SteamLite" `
-	"Folder on the desktop"
+$sll = Read-Host "Location of SteamLite. Leave emptry to create a" `
+	"SteamLite Folder on the desktop"
 if ([string]::IsNullOrEmpty($sll)) {
 	New-Item -Path "C:\Users\$env:USERNAME\Desktop\SteamLite" `
 	-itemtype Directory
@@ -16,17 +16,20 @@ if ([string]::IsNullOrEmpty($sll)) {
 $baseSteamLocation = $bsl
 $steamLiteLocation = $sll
 
+Write-Output "[*] extracting SteamLite"
+Expand-Archive "$PSScriptRoot\archives\SteamLite_1.8.5_x64-Steam006.zip" `
+-DestinationPath $steamLiteLocation
+
 $filesToLookFor = @(
 	"vstdlib_s.dll", "vstdlib_s64.dll", "tier0_s.dll",
 	"tier0_s64.dll", "steamclient.dll", "steamclient64.dll", "SDL2.dll",
 	"video.dll", "libavcodec-57.dll", "libavformat-57.dll",
 	"libavresample-3.dll", "libavutil-55.dll", "libswscale-4.dll",
-	"Steam.exe", "GameOverlayUI.exe", "GameOverlayRenderer64.dll",
-	"GameOverlayRenderer.dll"
+	"Steam.exe"
 )
 
 $foldersToLookFor = @(
-	"friends", "graphics", "public", "resource", "servers", "steam", "bin"
+	"bin"
 )
 
 
